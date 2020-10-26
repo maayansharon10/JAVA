@@ -1,0 +1,83 @@
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~README for ex2: SpaceShip exercise~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+============================================================================
+Description:
+============================================================================
+
+files submitted -
+
+
+============================================================================
+Design
+============================================================================
+Design -
+
+*** brief description of the design (what are the classes, what are their relationships, etc.).
+i decided to make Spaceship as an abstruct class, and have all sub- ship inheritance from it, since initalliting a
+space ship object doesn't make sense, but each kind of ship is a spaceship.
+SpaceShip is the root, its sub- classes are - Aggressive, Basher, Drunkard, Human, Runner, Special.
+SpaceWar, which runs the game is the one calling them and asking them to activate some method.
+
+spaceship factory is the class where all of them are being initialliezed at first by spaceWar.
+
+*** Design issues and decisions i had to made -
+
+## designing the root-class - SpaceShip -
+ 1)Firstly, the class is abstracts, since there is a  method that should exists in every ship, like doAction,
+ but each should be implemented differently. Also, this way if we would like to expand or change the game in the future,
+ we could 'force' all sub- ships to implement our new instructions.
+
+2) spaceship has a constructor which reset all it's data members to default.
+ i decided to make it this way since all ships need the same kind of initating in their constractor.
+
+3) SpaceShip has the ability to Teleport, Fire a single Shot and Turn on it's shield.
+ I decided to implement those 3 main activities in the Spaceship Class in order not to repeat the same code
+ since all ships execute them the same way. also, this way if we would be interested in changing one of the actions
+ above to all ships in the game we would need to change it only once.
+
+4) all numbers "cost of" some action are finals datamembers in SpaceShip Class, since all ships have the same
+ cost for firing a single shot, teleporting or putting their shield on, for code to be more easy to change
+ and read, i made them finals.
+
+
+5)  some other functions were protected, since several actions in the sub- classed need
+them in order to preform other methods. makes api larget but also make code look nicer with demands less duplications.
+also, as i saw it, spcaeship class should contain more of the responsibilities, like in real life for planes for ex -
+all planes have the ability to fly, turn, etc.., they have basically the same systems, but their use requires some
+modifications, which each plain preform only on itself, but generally those modifications don't change the essence of
+the plane.
+this is way i decided to make the following methods protected -
+a) generalizing and using one functions for all sub- classes - since most ships used those methods)
+areThereEnoughPointsForAction(int action cost) for all types of actions,
+and same for removeSomeEnergyPoints(int action cost), findClosestShip(SpaceWars game),
+isAngleCloseEnough, findAngleToOther, findClosestShip etc
+b) getIsShieldOn and setIsShieldOn - in order to access those data members not directly, only by it's sub classes.
+c) methods such addEnergyEndOfRound() were written in spaceship as protected so i would only expose one methode, and not
+both get and set of currentEnergy, which i did't want to expose
+
+
+============================================================================
+Implementation issues
+============================================================================
+ this section should contain all important comments about implementation
+issues that you think would help understanding your code or should be pointed out since they are
+important in some sense.
+
+it was critical to me that code would be easy to change and add to, this is why the SpaceShip's sub-classes have a
+minimal api with only one method - doAction, and most of the methods happens in spaceship.
+As described  in section above, i tried to make most of the functions as general as possible, so they could be used for
+multiple ships, just with different params. this is why the constructor of spaceship calls a method to initialize all
+relevant data members, same as retart method, do avoid code duplication, and also that each time we restart the ship,
+it will have the same attributes as it had at the moment of it's initial creation.
+
+notice that get image in Human overrides the one of spaceship, since there could be only one human and it has different
+image as representation.
+
+
+============================================================================
+Answers To Questions
+============================================================================
+None this ex.

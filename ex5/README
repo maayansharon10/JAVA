@@ -1,0 +1,118 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~README for ex3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+============================================================================
+File Description:
+============================================================================
+
+# file processing is the main package within all the files of the ex except the README:
+    #comparators package :
+        CompareNames.java - comparator by absolute path
+        CompareSize.java - comparator by size of file
+        CompareType.java - comparator by type
+        ReverseComparatorDecorator - reversed comparator, received a comparator and returns the opposite
+                                     result
+    #exceptions package :
+        ExceptionType1.java - represent an exception of first type as described in ex description
+        ExceptionType2.java - represent an exception of second type as described in ex description
+    #filters Package
+        Filter.java - interface representing a filter object
+        FilterFactory.java - factory for filters
+        AllFilter.java - all pass filter
+        BetweenFilter.java - implement Filter
+        ContainsFilter.java - implement Filter
+        FileFilter.java - implement Filter
+        GreaterThanFilter.java - implement Filter
+        HiddenFilter.java - implement Filter
+        NotFIlterDecorator.java - implement Filter
+        PrefixFilter.java - implement Filter
+        SuffixFilter.java - implement Filter
+        WritableFilter.java - implement Filter
+    #orders package
+        Order.java - interface for an object which can order a file array.
+        OrderFactory.java - factory for method
+        FileOrganizer.java - implements Order. get a comparator of files to it's constructor and organize it
+                             with FileMargeSorter object.
+    #sortingfile package
+        FileMargeSorter.java - sorts an array of files and uses a file comparator
+    DirectoryProcessor.java - the main class, contains the file processor implementation and main method
+    InstructionReader.java - receive a text file and return an arraylist of sections
+    Section.java - an object which represent one section in text file/
+
+
+============================================================================
+Design
+============================================================================
+Design -
+
+*** brief description of the design (what are the classes, what are their relationships, etc.).
+*** and Design issues and decisions i had to made -
+
+a broad look of the program -
+i implemented an instruction reader which is an object who reads the text files and 'give instruction' by
+sorting the text into valid sections. it also throw excption of type 2 to main if the text file is cannot
+be divided into valid sections and handles first type exceptions while creating the sections .
+
+section is also an object which holds a filter and an order objects and other helping data members and
+methods to help printing the warning if needed.
+
+i decided to implement it this way since it is simillar to how i would implement it in real life -
+look at the text, try to separate it into sections (like the instrucion reader), and each section should
+know if it has warning or valid filter.
+
+
+============================================================================
+Implementation issues
+============================================================================
+more subtle choices of design due to implementation issues i encountered.
+
+//filter and orders -
+both order and filter are interfaces, which represent objects which have the capacity to organize some files
+or filter if a file passes a certain condition or not.
+in filters package there're there's the filter interface with the method - "doesPassFilter", all the
+different filters which implement filter. also there is also the factory which creates filters based on a
+string split into array which the filter's instructions.
+in orders package there's the interface Order which implements a method 'orderFiles'. there's the
+FileOrganizer object which receives a comparator to it's constructor and knows a sorting algorithem i built.
+this way we can put any comparator into this object and it will 'become' the kind of order we want to
+implement. for example - if we put CompareName into the FileOrganizer's constructor it will operate as
+'abs order' and so on.
+important to mention that for this ex i built 3 comparator and one 'not' decorator for comparator but also
+in the future if we would like to extend the different orders we could built more file comparators which are
+independent and they would work as well. this way our program is modular and is easy to extend.
+in a similar way we can built more objects which implements filter interface and use them to filter files.
+those objects do not have to know anyone in our current or future program, the only change we would have to
+make would be in our filter factory.
+
+//sorting
+i decided to implement merge sort since it has nlogn running time which makes it efficient. it also get a
+comparator so the compare method could compare two files in any way we would decide to implement. this way
+we could make countless of different sorting in an efficient way.
+
+// processing a section - filter, order and print (output and warnings)
+i decided to deal with the intire printing, both to screen and to err, in main file which is the Direcory
+Processor. the main calls a method called section processor which deals with filter, order and printing of
+the files array.
+as i saw it each program may want to implement differently the processing of the section, therefore it is a
+method related to the program and the section itself shouldn't know about it.
+when dealing with printing a section i separated it into 2 actions - printing the warning and printing the
+files after they were filtered and sorted according to the right order.
+when printing a warning we check the boolean values that each section has about filter or order's existnce
+of warning, and if they exists - a default msg with the line number is printed.
+when creating a section in instructionReader, if there's some sort of warning it immidiatly update the
+current section, this is how each section knows all the informative data about itself, and can be printed
+later without sending arguments.
+
+// using decorators -
+i decided to implement a not decorator for any comparator, this way i avoid code duplication,
+in a simillar way to create a NotFilterDecorator which implements filter. it recives an existing filter into
+it's constructor and when implementing the filter's interface method it return the opposite result regarding
+a certain file.
+
+// dealing with type 2 exceptions - whenever the program ddiscover a type 2 exception (as a different
+exception or as a structural error in the text file) the method catches it and throws a type 2 excption
+with an informative msg. the main is the only one who chatches this type of exception. an exception of this
+sort might be thrown only before the process of creating the sections array was complete. this way type 2
+error (due to any case) will terminate the program and Error msg will be print to system.err.
+each

@@ -1,0 +1,183 @@
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~README for ex3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+============================================================================
+File Description:
+============================================================================
+
+files submitted (besides README)-
+SimpleHashSet.java - a superclass for implementations of hash-sets implementing the SimpleSet interface.
+ClosedHashSet.java - A hash-set based on closed-hashing with quadratic probing. Extends SimpleHashSet.
+StringSpecialWrapper.java -a wrapper to a string used by closed hash set
+OpenHashSet.java - a hash-set based on chaining. Extends SimpleHashSet.
+LinkedListWrapper.java -  wrapper for linked list.
+CollectionFacadeSet.java - Wraps an underlying Collection and serves to both simplify its API and
+                           give it a common type with the implemented SimpleHashSets.
+SimpleSetPerformanceAnalyzer.java - this class compare the performances of 5 different data structure:
+RESULTS - present the results of running all 6 tests in SimpleSetPerformanceAnalyzer.java according to the
+        requested order.
+
+
+============================================================================
+Design
+============================================================================
+Design -
+
+*** brief description of the design (what are the classes, what are their relationships, etc.).
+*** and Design issues and decisions i had to made -
+part 1 -
+SimpleHashSet is the super class and implements the  SimpleSet interface. close and open hash sets inherit
+from this class so effectivaly implements simple set also.
+close hash set holds a data member, bucket, which is a string special wrapper. also, open hash set holds a
+data member ,bucket, as a linked list wrapper. this way if we would want to use the wrappers for more hash
+set implementation, it is possible. also if we would want to extand the methods their methods or replace it
+with a different rapper it is also possible.
+i choose this design since i think this way i evoid code duplication and manage to seperate the hash list
+and the actions i take on it.
+Also inheritage in this case is an obiose choice since both open and close has 'is a' conncetion to
+simple has set.
+
+part 2 -
+SimpleSetPerformanceAnalyzer.java :
+as i understood the task we had to enable running each set of tests by itself.
+so the program recive an input from user, and asks for the tests number it wished to run.
+then the program runs only those programs. since each program restart and in case needed ' filling the
+relavant data' we can chose to run any combination of test we wish, one, several or all six of them.
+
+============================================================================
+Implementation issues
+============================================================================
+this section should contain all important comments about implementation
+issues that you think would help understanding your code or should be pointed out since they are
+important in some sense.
+
+------------------------------------------------------------------------------------
+--------------- simpleHasSet ----------------
+
+there were more then few methods which were the same in both open and closed hash sets.
+to avoid code duplication, since they were exactly the same, i decided to place them in SimpleHashSet,
+since both inherit from it, the following methods as protected -
+doesSurpassCapacity(), isSmallerThanCapacity(),shrinkCapacityTimes(int value),
+enlargeCapacityTimes(int value), decreasing and increasing size by one point.
+also, for same reasoning with 'size' data member and helper functions () as both
+open and closed hash sets require this data member which initialized in the constructor.
+enlarging API with protected methods in this case is better, in my eyes, than writing the same methods
+multiple times.
+
+in Analizer
+
+--------------- open hash set ---------------
+i chose to make each object in my hash table as a linked list. in order to make it more affective i chose to
+make a wrapper class so each place in the array would hold an object and it would hold the array list
+this way if i would like to change the data structure which holds the items in this array i could change
+this class or if would want to preform certain actions on those linked list or create certain sada members
+related to a specific list i could do it inside the class so it would be modular and hidden from the client.
+
+--------------- closed hash set -------------
+created a inner class which wraps each string. this way the closedhashset class can hold a data member of
+an array of the object, which are basically strings, but we can also return their value. this way we could
+know it item was deleted or not.
+once an item is added, the object is not not null. once 'deleted' the object itself is not null, but
+the value of the string it holds, this way i would not need to go through the entire array to search for an
+ item.
+The for loop runs over all relevant index in hashtable -
+ if it finds the object - we are done.
+if the place hold a deleted object, the loop continues, since there's a situation where the element was
+added this index was taken so it was placed farther along the table.
+if it reaches a null object, then we are certain it could never be there at all,
+so for sure our hash table doesn't cotains it.
+this way we do not have to go over the entire loop, so we save running time, more efficient and also we
+hide the strings, and the way we decide to hold our objects. in the future we could add more abilities to
+the inner class and do other manipulation on our data if needed.
+
+
+
+============================================================================
+Implementation issues
+============================================================================
+• How you implemented OpenHashSet’s table
+answer:
+as i explained above, i use a wrapper for linked list, and the buckets ( the hash table)  holds an array of
+this type of object.
+i decided to implement it this way since it was easier to change, add methods to. in the future if i would
+like to change the way this objects acts (iterators, generators, adding, removing etc) it would be in only
+one place and there would be no need to change the entire code (modularity).
+
+• How you implemented the deletion mechanism in ClosedHashSet
+the close object, as i decided to implement it, hold an array of an object which is a string wrapper.
+this object holds a data member which is the value of the string.
+answer:
+first, i check if the bucket (table) contains it, if so - immediatly returns false.
+then i find the hash value of this string (since it doesn't change thoughout the running time).
+ now we know the string we're looking of is in the bucket - then
+enter a 'for' loop iterating over the formula given in the ex dicription when i runs from 0 to bucket.length
+(as we were told it must give a valid index after one full iteration).
+in each iteration :
+- we clac the clamp once (to save running time and evoide code duplication)
+- if there's no object (= null) or there's an object and it's value is null (meaning it was deleted)
+we continue to next i (since the there's nothing to delete)
+- if the place in array (according to index we calc with clamp) has an object and it's value is equal to the
+string we wish to delete - then assign this object's value to be null. this way the contains knows there was
+an object there once and it was deleted. then we remove one from size (to update this data member and
+then we check if table need to be resize, and resize if necessary. if we got up until here - return false.
+if leaves the for loop withour finishing this pocess (not posible acording to clamp fomula) then return
+false.
+
+
+• Discuss the results of the analysis in depth:
+– Account, in separate, for OpenHashSet’s and ClosedHashSet’s bad results for data1.txt
+
+
+
+– Summarize the strengths and weaknesses of each of the data structures as reflected by
+the results. Which would you use for which purposes?
+answer -
+open -
+1. adding data with the same hash (like data1) - open is significantly faster than close.
+2.searching is a negative long which is contained in bucket it takes both of then a relatevly long time but
+still better than open
+close -
+1.adding data which hash code is evenly distributed in hashteable (like data2) - close has is significantly
+ faster than open.
+2.looking of a short string with a different hash code than the ones existing in bucket than close is
+significantly faster than open.
+3. looking for a string that appear in a data which is evenly distributed
+4. looking for a string which is initialized in a data which has codes are evenly distributed, close is
+significantly faster than open.
+
+– How did your two implementations compare between themselves?
+answer -
+most of the time there were very large gaps between the two options. one was very efficiant while the other
+was obiously not. the interesting part is that most of the time close was faster, but only by one test,
+(4 out of 6), but since there were not enough test, even i can see for some actions it's faster, i cannot
+say for sure it is in most cases do better than open hash.
+
+– How did your implementations compare to Java’s built in HashSet?
+answer -
+adding data with the same hash (like data1) was slower signifaclly from java's built hash set.
+when adding data 2 - open was a bit more than twice than java's linked list, but close was proforming better
+than treeset and not too far from hash set.
+contains hi on data 1 open preformed better than linked list and close was fairly close to hashset, which
+had the best result in this test.
+check if a large negative long was in data 1 which the table contained took a long time to both open and
+close in comperassion to all other hashtables.
+contains 23 - close got good results, slower, not by much, from hashset and fater from treeset, while open
+was totally behind them all.
+in contains hi in data 2, again, close got close results to hash set and much better than tree set (which
+came 3rd) but open was way behind.
+
+in conclusion - when close was fast it had simallar result as hashset, but when open was fast it had similar
+results to linked list, which don't come close to hashset.
+
+– Not mandatory: Did you find java’s HashSet performance on data1.txt surprising? Can
+you explain it?
+in the test i run it was the only place where tree set ran faster than hash set.
+it is not so surprising since tree set has a easy structer for searching ints, making it's run pretty
+efficient.
+
+• Any additional information about your design you’d like to specify
+
+
+

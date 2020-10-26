@@ -1,0 +1,101 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~README for ex1: Library exercise~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+============================================================================
+Description:
+============================================================================
+
+files submitted -
+Book.java -
+This class represents a book, which has a title, author, year of publication and different literary aspects
+(Comic, Dramatic and Educational). book also has a bookId current borrower Id.
+
+Patron.java -
+This class represents a library patron that has a name, assigns values to different literary aspects of
+books and has a enjoyment threshold (beyond it, would like to borrow a book).
+
+Library.java -
+This class represents a library, which hold a collection of books. Book can be registered to a library (but
+not unregistered from it).
+Patrons can register at the library to be able to check out books, if a copy of the requested book is available.
+patron can also get a recomendation, for the book in the library he will enjoy the most, if such exist.
+
+============================================================================
+Design
+============================================================================
+Design issues -
+
+
+*** Design issues and decisions i had to made -
+(*) Library holds an array of books, which represents it's id number. i decided to let the book hold it's id
+number, given by a library once registered since a book can be registered to one library at a given time
+(unlike patrons)
+
+(*) Library holds an array of patron, patronArray, which represents their's id number.
+it also holds a parallel array of integers, borrowPatronStatusArray, the place represents the patron's id number and the value is
+the number of books this patron is currently have in his possession.
+ i decided the library should hold it since one patron can be registreated to multiple libraries, and if the
+ patron would be the one keeping track, it would be very difficult for the library to be able to decide if
+ it can let this patron borrow another book or not, according to it's maximal number of books this library
+ allows a single patron to borrow at the same time.
+ this way we can have different libraries or 'clubs' of some sort and patrons can be part of several clubs,
+ like in real life, making code easier to change or add to once needed.
+
+(*) i also decided to define a counter for the books (shelfcounter) and a counter for the patrons
+(patronCounter), which suppose to point at the next spot of the array. this way there's no loop needed when
+wishing to register another patron or book to library.
+
+(*) when creating a new array of size n, each item is initialize as null, so i had to check before several
+methods if the item is null or not, so i wouldn't call a function on a null object and exception error will
+crash my code.
+
+*** brief description of the design (what are the classes, what are their relationships, etc.).
+
+Book.java -
+This class represents a book, which has a title, author, year of publication and different literary aspects
+(Comic, Dramatic and Educational). book also has a bookId (default -1, until one is given by a certain
+library book is registered to) and current borrower Id (default -1, non negative given by a certain library,
+if a patron is borrowing the book). Book has some get and set methods.
+book Class is independent, doesn't all it's methods operate only on data members in book class.
+
+Patron.java -
+we assume patron class knows book class.
+This class represents a library patron that has a name, assigns values to different literary aspects of
+books and has a enjoyment threshold (beyond it, would like to borrow a book).
+patron has a method calculating if it will enjoy some book, depending on a personal threshold, assign to a
+patron object once created. this method is using another method, calculating the book score this patron would
+give to a specific book.
+patron class has also some get and set methods.
+
+Library.java -
+we assume library class knows both patron and book classes.
+This class represents a library, which hold a collection of books.
+A book can be registered to a library (but not unregistered from it).
+Patrons can register at the library to be able to check out books,
+if a copy of the requested book is available.
+each patron can borrow limited number of books, depends on the library, and can also return them and take
+other books, as long as he's in his 'borrowing limit'.
+patron would not borrow a book which he's not going to enjoy. it's library method to check it, since library
+object knows all books and all patron registered to it.
+patron can also get a recomendation from library, for the book in the library he will enjoy the most,
+if such exist.
+
+
+============================================================================
+Implementation issues
+============================================================================
+s: this section should contain all important comments about implementation
+issues that you think would help understanding your code or should be pointed out since they are
+important in some sense.
+
+it was critical to me that code would be readable and easy to change,
+so as described  in section above i decided to let the library be incharge of which books can be borrowed to
+which patron etc, so if in the future, library's rules would change, we could only change this class, and
+would not have to go through each patron. make sense that this an organization could run and make changes
+by itself without checking in with all it's consumers.
+
+============================================================================
+Answers To Questions
+============================================================================
+None this ex.

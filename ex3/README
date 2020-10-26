@@ -1,0 +1,117 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~README for ex3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+============================================================================
+File Description:
+============================================================================
+
+files submitted -
+# Locker.java -
+A kind of Storage. A locker can contain different types of items. Each item have a unique
+identifying type. can add and remove from locker. all locker knows one longTermStorage object.
+Storage units are positive integers. Each locker has a non-negative integer, not changing capacity
+
+# LockerTest.java -
+This file should be able to test any possible implementation a Locker class
+ which implements the functionalities described in the Locker actions section of this exercise.
+
+# LongTermStorage.java -
+Is a type of Storage. It can contain different types of items, each has a unique identifying type,
+Storage units are positive integers. and it's capacity is always 1000.
+
+# LongTermTest.java -
+This file should be able to test any possible implementation a LongTermStorage class,
+ which implements the functionalities described in the Locker actions section of this exercise.
+
+# SpaceshipDepositoryTest.java - Test suite which runs all provided test.
+
+# Storage.java - A storage is an object which can contain items with a unique identifying type,
+Storage units are positive integers. Each storage object has a non-negative integer, not changing capacity
+
+# BoopingSite.java -
+implements some of the functunalities of an hotel booking site, that allows for personalized search
+methodologies. this class provide the users with the ability to get a list of hotels based on different
+parameters
+
+# BoopingSiteTest.java -
+This file should be able to test any possible implementation a BoopingSite class,
+which implements the functionalities described in the Locker actions section of this exercise.
+
+# CompareRating.java -
+this class compare between two hotels according to their star ratings
+
+# HotelCompareDistance.java
+this class compares two hotels according to their distance from a certain location
+
+============================================================================
+Design
+============================================================================
+Design -
+
+*** brief description of the design (what are the classes, what are their relationships, etc.).
+*** and Design issues and decisions i had to made -
+
+## LOCKER PROBLEM -
+I decided to choose inheritance for this problem, and implement another class "Storage", which stands for a
+general storage. this object can contain items with a unique identifying type,
+Storage units are positive integers. Each locker has a non-negative integer, not changing capacity.
+Clearly, both Locker and LongTermStorage *is a* type of Storage.
+This way i could avoid code duplication and force both locker and storage to have a similar methodology.
+In this ex' - Storage is the 'father' and LongTermStorage and Locker extends it.
+Storage is an abstract class since addItem method in Locker and LongTermStorage were different in,
+i made this function abstract. it made sense since each storage object should had it, but each storage
+object might choose to add items to is by different logic.
+by choosing inheritance i can extend my program and add more storageable objects, if i wish.
+
+## BOOPINGSITE PROBLEM -
+in Boopoing site i implemented one general class with all the methods needed, and for comparing hotels'
+distances and star rating i created 2 comparators, CompareRating and HotelCompareDistance.
+this way i could follow the api with a modular code, which looked more elegant than multiple conditions
+and in case changes of distance or star rating params, or the way we would to measure them differently we
+ could change only the comparator class.
+
+
+============================================================================
+Implementation issues
+============================================================================
+this section should contain all important comments about implementation
+issues that you think would help understanding your code or should be pointed out since they are
+important in some sense.
+
+i decided to implement the storage variable which contains the different items as a map,
+which holds the item's name, a string, as key, and the number of items a storage currently holds, as value.
+This way, there's no limitation on the number of items a storage object can hold. like in real life,
+a certain storage can hold one big item or countless small ones. also, this way we can potentinally change
+a certain item's volume, therefore we are not bind to a non-changable volume for a certain item, since
+in case we would like to change it, and it is still with agreement with the rest of the constrains, it would
+not be an issue.
+
+i also decided to implement the 'takenCapacity' in storagable as int so it would be easy to update upon
+addition or removal of a certain object
+
+note that adding or removing of 0*items is always a success, dispite if the item we wish to add is clashing
+with a current item in locker. the reason i chose to implement it this way is that just like in real life,
+if we add zero items (like imaginary item) to a certain storage, it it is not a problem, but effectivly
+nothing changes, exactly what happend in my program. also it contain some of the user's mistakes without
+throwing an exception, notifing the user or change anything about the program (or in this case - the
+locker), so from my prespective it deals with several user's mistakes in an elegant way.
+the only reason it can be considered as a fail, is if this item is clashing another item which is currently
+in locker, since the ex' description it clearly demanded that this is the locker's first priority.
+
+again, follows the same logic in add item for LongTerm, except here we do not have a clash happend in any
+case, so adding or removing zero items would always be a success.
+
+in the Booping problem i decided to implement two comparators since it made my code modular and easy to
+change if needed, more elegant (instead of lots of conditions in my code), and also i could applay the same
+logic to other methods without code duplication. Another reason is that by using comperator i could arrange
+my array or array list with an existing method from array collections, which help me refrain from more
+code duplication.
+
+============================================================================
+Answers To Questions
+============================================================================
+None this ex.
+
+
+hotels test - build another distance methode, to avoid making the samme methose protected and enlarge the api
